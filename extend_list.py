@@ -1,5 +1,4 @@
 class extend_list(list):
-  _list = []
 
   def __init__(self, _list):
     self._list = [] + _list
@@ -40,23 +39,25 @@ class extend_list(list):
   #   return extend_list([self._list.sort(key, reverse)])
     
   def copy(self):
-    return extend_list([self._list.copy()])
+    return extend_list(self._list.copy())
     
   def map(self, func):
-    new_list = extend_list([])
+    returned_extend_list = extend_list([])
     for i in range(self.size()):
-      new_list.append(func(self[i]))
-    return new_list
+      returned_extend_list.append(func(self[i]))
+    return returned_extend_list
     
   def filter(self, func):
-    new_list = extend_list([])
+    returned_extend_list = extend_list([])
     for i in range(self.size()):
-      if func(self[i]): new_list.append(self[i]) 
-    return new_list
+      if func(self[i]): returned_extend_list.append(self[i]) 
+    return returned_extend_list
     
+  # foreachで自身をreturnしていいのか調べる
   def foreach(self, func):
     for i in range(self.size()):
       func(self[i])
+    return self
   
   def reduce(self, func):
     accumulator = self[0]
@@ -65,13 +66,13 @@ class extend_list(list):
     return accumulator
   
   def reverse(self):
-    new_list = extend_list([])
+    returned_extend_list = extend_list([])
     length = self.size()
     for i in range(length):
-      new_list.append(self[length-1-i])
-    return new_list
+      returned_extend_list.append(self[length-1-i])
+    return returned_extend_list
     
-  def dreverse(self):
+  def d_reverse(self):
     length = self.size()
     for i in range(int(length/2)):
       self._list[i], self._list[length-i-1] = self._list[length-i-1], self._list[i] 
@@ -84,11 +85,21 @@ class extend_list(list):
       result += str(self[i])
     return result
   
-  def sort(self, func):
-    n =1
-    
+  #ソート 非破壊的
+  #func適用は後で考える
+  def sort(self, func=None):
+    returned_extend_list = self.copy()
+    if(func == None): 
+      returned_extend_list._list.sort()
+      return returned_extend_list
+      
   def size(self):
     return len(self._list)
+  
+  # 改行出力用
+  def println(self):
+    print()
+    return self
   
 # Below, test code
   
@@ -99,10 +110,9 @@ def print_func(x):
   print(x, end='')
 
 if __name__ == "__main__":
-  test = extend_list([1,2,3,4])
-  test.append(4)
-  print(test.pop())
-  test.map(lambda x: x + 2).filter(lambda x: x > 3).foreach(print_func)
+  test = extend_list([1,2,3,4,3,2,1,3])
+  test.sort().foreach(print_func).println()
+  test.map(lambda x: x + 2).filter(lambda x: x > 3).foreach(print_func).println()
   test2 = extend_list(["i", "n", "t"])
   print(test2.reverse().join())
  
