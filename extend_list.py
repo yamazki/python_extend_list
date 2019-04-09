@@ -1,6 +1,6 @@
 class ExtendList(list):
   
-  def __init__(self, __list):
+  def __init__(self, __list=[]):
     self.__list = [] + __list
     
   def __getitem__(self, index):
@@ -93,12 +93,11 @@ class ExtendList(list):
     return len(self.__list)
   
   # to output \n
-  
   def println(self):
     print()
     return self
   
-# Below, test code
+# Below, test codes
   
 def add(x):
   return lambda y: x + y
